@@ -86,7 +86,7 @@ export default function LoginPage() {
           <Box
             sx={{
               flex: 1,
-              background: "linear-gradient(to right, #2196f3, #9c27b0)",
+              background: "linear-gradient(135deg, #2196f3 0%, #9c27b0 100%)",
               color: "white",
               display: "flex",
               justifyContent: "center",
@@ -125,51 +125,60 @@ export default function LoginPage() {
                 position: "absolute",
                 width: "200%",
                 height: "200%",
-                background: "radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 50%)",
-                animation: "rotate 20s linear infinite",
+                background: `
+                  radial-gradient(circle at 30% 30%, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 30%),
+                  radial-gradient(circle at 70% 70%, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 25%)
+                `,
+                animation: "rotate 30s linear infinite",
                 zIndex: 0,
               }}
             />
 
-            {/* Background animations */}
-            {[...Array(12)].map((_, i) => (
+            {/* Animated paw icons with improved visibility */}
+            {[...Array(15)].map((_, i) => (
               <PetsIcon
                 key={i}
                 sx={{
                   position: "absolute",
-                  fontSize: `${35 + i * 5}px`,
+                  fontSize: `${40 + i * 6}px`,
                   top: `${Math.random() * 100}%`,
                   left: `${Math.random() * 100}%`,
-                  color: "rgba(255,255,255,0.25)",
-                  animation: `floatUp ${12 + i * 2}s linear infinite`,
+                  color: "rgba(255,255,255,0.3)",
+                  animation: `floatUp ${15 + i * 2}s linear infinite`,
                   transform: `rotate(${Math.random() * 360}deg)`,
+                  filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.1))",
                 }}
               />
             ))}
 
-           
             <Box sx={{ position: "relative", zIndex: 1, textAlign: "center" }}>
               <Typography
-                variant="h3"
+                variant="h2"
                 fontWeight="bold"
                 gutterBottom
                 sx={{
-                  textShadow: "2px 2px 4px rgba(0,0,0,0.2)",
-                  letterSpacing: "2px",
+                  textShadow: "2px 4px 8px rgba(0,0,0,0.2)",
+                  letterSpacing: "3px",
+                  background: "linear-gradient(to right, #ffffff, #e0e0e0)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  mb: 3,
                 }}
               >
                 Royal Furry Heaven
               </Typography>
               <Typography
-                variant="subtitle1"
+                variant="h6"
                 sx={{
-                  opacity: 0.9,
-                  maxWidth: "80%",
+                  opacity: 0.95,
+                  maxWidth: "90%",
                   margin: "0 auto",
-                  letterSpacing: "1px",
+                  letterSpacing: "1.5px",
+                  lineHeight: 1.8,
+                  textShadow: "1px 2px 4px rgba(0,0,0,0.15)",
                 }}
               >
-                Pampering Your Pets with Love — Sign in to continue
+                  Pampering Your Pets with Love🩷💜  Sign in to continue
               </Typography>
             </Box>
           </Box>

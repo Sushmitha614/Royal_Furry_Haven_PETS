@@ -1,18 +1,21 @@
-import React from "react";
+import React, { useState } from 'react';
 import {
-  TextField,
-  Checkbox,
-  Button,
-  Typography,
-  Link,
-  Card,
-  CardContent,
   Box,
-  Grid,
-  FormControlLabel
-} from "@mui/material";
+  Button,
+  Card,
+  Checkbox,
+  FormControlLabel,
+  Link,
+  TextField,
+  Typography,
+  IconButton,
+  InputAdornment
+} from '@mui/material';
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import PetsIcon from '@mui/icons-material/Pets';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import logo from '../assets/LOGO.png';
 
 const theme = createTheme({
   palette: {
@@ -36,6 +39,26 @@ const theme = createTheme({
 });
 
 export default function LoginPage() {
+  const [showPassword, setShowPassword] = useState(false);
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+    remember: false
+  });
+
+  const handleChange = (event) => {
+    const { name, value, checked } = event.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: name === 'remember' ? checked : value
+    }));
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log('Form submitted:', formData);
+    // Add your login logic here
+  };
   return (
     <ThemeProvider theme={theme}>
       <Box
@@ -74,6 +97,29 @@ export default function LoginPage() {
               padding: 4,
             }}
           >
+            {/* Add logo in top-left corner */}
+            <Box 
+              sx={{ 
+                position: "absolute",
+                top: 20,
+                left: 20,
+                zIndex: 2,
+              }}
+            >
+              <img 
+                src={logo} 
+                alt="Royal Furry Heaven Logo" 
+                style={{
+                  width: '100px',
+                  height: '100px',
+                  borderRadius: '50%',
+                  objectFit: 'cover',
+                  border: '2px solid rgba(255,255,255,0.3)',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.2)'
+                }}
+              />
+            </Box>
+
             <Box
               sx={{
                 position: "absolute",
@@ -85,20 +131,23 @@ export default function LoginPage() {
               }}
             />
 
-            {[...Array(6)].map((_, i) => (
+            {/* Background animations */}
+            {[...Array(12)].map((_, i) => (
               <PetsIcon
                 key={i}
                 sx={{
                   position: "absolute",
-                  fontSize: `${30 + i * 5}px`,
+                  fontSize: `${35 + i * 5}px`,
                   top: `${Math.random() * 100}%`,
                   left: `${Math.random() * 100}%`,
-                  color: "rgba(255,255,255,0.1)",
-                  animation: `floatUp ${10 + i * 2}s linear infinite`,
+                  color: "rgba(255,255,255,0.25)",
+                  animation: `floatUp ${12 + i * 2}s linear infinite`,
+                  transform: `rotate(${Math.random() * 360}deg)`,
                 }}
               />
             ))}
 
+           
             <Box sx={{ position: "relative", zIndex: 1, textAlign: "center" }}>
               <Typography
                 variant="h3"
@@ -137,71 +186,119 @@ export default function LoginPage() {
             }}
           >
             <Box sx={{ width: "100%", maxWidth: 400 }}>
-              <Typography variant="h6" gutterBottom>
-                Hello! <span style={{ color: theme.palette.secondary.main }}>Good Morning</span>
+              <Typography 
+                variant="h5" 
+                fontWeight="500" 
+                color="text.primary" 
+                gutterBottom
+              >
+                Sign In
               </Typography>
-              <Typography variant="h5" fontWeight="bold" color="primary" gutterBottom>
-                Login Your Account
+              <Typography 
+                variant="body2" 
+                color="text.secondary" 
+                sx={{ mb: 4 }}
+              >
+                Please enter your credentials to continue
               </Typography>
-              <Box component="form" noValidate autoComplete="off">
+              <Box component="form" noValidate autoComplete="off" onSubmit={handleSubmit}>
                 <TextField
                   fullWidth
                   margin="normal"
                   label="Email Address"
-                  variant="outlined"
+                  variant="standard"
+                  name="email"
+                  type="email"
+                  value={formData.email}
+                  onChange={handleChange}
                   sx={{
-                    '& .MuiOutlinedInput-root': {
-                      '&.Mui-focused fieldset': {
-                        borderColor: theme.palette.primary.main,
-                      },
+                    mb: 3,
+                    '& .MuiInputLabel-root': {
+                      color: 'text.secondary',
+                      fontSize: '0.875rem',
+                    },
+                    '& .MuiInput-underline:after': {
+                      borderBottomColor: 'primary.main',
                     },
                   }}
                 />
                 <TextField
                   fullWidth
                   margin="normal"
-                  type="password"
                   label="Password"
-                  variant="outlined"
+                  variant="standard"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  value={formData.password}
+                  onChange={handleChange}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={() => setShowPassword(!showPassword)}
+                          edge="end"
+                          size="small"
+                          sx={{ color: 'text.secondary' }}
+                        >
+                          {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
                   sx={{
-                    '& .MuiOutlinedInput-root': {
-                      '&.Mui-focused fieldset': {
-                        borderColor: theme.palette.primary.main,
-                      },
+                    mb: 2,
+                    '& .MuiInputLabel-root': {
+                      color: 'text.secondary',
+                      fontSize: '0.875rem',
+                    },
+                    '& .MuiInput-underline:after': {
+                      borderBottomColor: 'primary.main',
                     },
                   }}
                 />
-                <Box display="flex" justifyContent="space-between" alignItems="center" my={1}>
+                <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
                   <FormControlLabel
-                    control={<Checkbox color="primary" />}
-                    label={<Typography variant="body2" color="text.secondary">Remember</Typography>}
+                    control={
+                      <Checkbox 
+                        color="primary" 
+                        name="remember"
+                        checked={formData.remember}
+                        onChange={handleChange}
+                        sx={{ '&.Mui-checked': { color: theme.palette.primary.main } }}
+                      />
+                    }
+                    label={<Typography variant="body2">Remember me</Typography>}
                   />
-                  <Link href="#" underline="hover" color="secondary">
+                  <Link href="#" underline="hover" sx={{ color: theme.palette.primary.main, fontWeight: 500 }}>
                     Forgot Password?
                   </Link>
                 </Box>
                 <Button
+                  type="submit"
                   fullWidth
                   variant="contained"
                   size="large"
                   sx={{
-                    borderRadius: 8,
-                    paddingY: 1.5,
-                    mt: 2,
+                    borderRadius: 2,
+                    py: 1.5,
+                    textTransform: 'none',
+                    fontSize: '1.1rem',
+                    fontWeight: 600,
                     background: "linear-gradient(to right, #2196f3, #9c27b0)",
-                    color: "#fff",
-                    fontWeight: "bold",
                     '&:hover': {
                       opacity: 0.9,
                     },
                   }}
                 >
-                  SUBMIT
+                  Sign In
                 </Button>
-                <Box mt={2} textAlign="center">
-                  <Link href="#" underline="hover" color="primary">
-                    Create Account
-                  </Link>
+                <Box mt={3} textAlign="center">
+                  <Typography variant="body2" color="text.secondary">
+                    Don't have an account?{' '}
+                    <Link href="#" underline="hover" sx={{ color: theme.palette.primary.main, fontWeight: 500 }}>
+                      Sign Up
+                    </Link>
+                  </Typography>
                 </Box>
               </Box>
             </Box>

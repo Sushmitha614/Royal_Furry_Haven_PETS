@@ -1,38 +1,120 @@
+:root {
+  --primary-blue: #2196f3;
+  --primary-purple: #9c27b0;
+  --gradient-start: #00c6ff;
+  --gradient-end: #b066ff;
+  --text-color: #333;
+  --white: #ffffff;
+}
+
 .App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
   min-height: 100vh;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  background-color: var(--white);
+}
+
+.login-container {
+  display: flex;
+  width: 80%;
+  max-width: 1200px;
+  height: 600px;
+  background: var(--white);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.login-left {
+  flex: 1;
+  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+  padding: 40px;
+  color: var(--white);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.wave-bg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0.3;
+}
+
+.login-right {
+  flex: 1;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.login-form {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.login-form input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: none;
+  border-bottom: 2px solid #eee;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.login-form input:focus {
+  border-bottom-color: var(--primary-blue);
+}
+
+.submit-button {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(to right, var(--primary-blue), var(--primary-purple));
   color: white;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: opacity 0.3s;
 }
 
-.App-link {
-  color: #61dafb;
+.submit-button:hover {
+  opacity: 0.9;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+  .login-container {
+    width: 95%;
+    flex-direction: column;
+    height: auto;
   }
-  to {
-    transform: rotate(360deg);
+
+  .login-left {
+    padding: 30px;
+    min-height: 200px;
+  }
+
+  .login-right {
+    padding: 30px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .login-container {
+    width: 100%;
+    border-radius: 0;
+  }
+
+  .login-left, .login-right {
+    padding: 20px;
   }
 }

@@ -16,6 +16,8 @@ import PetsIcon from '@mui/icons-material/Pets';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import logo from '../assets/LOGO.png';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const theme = createTheme({
   palette: {
@@ -39,6 +41,7 @@ const theme = createTheme({
 });
 
 export default function LoginPage() {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
@@ -54,10 +57,25 @@ export default function LoginPage() {
     }));
   };
 
-  const handleSubmit = (event) => {
+  const [error, setError] = useState('');
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log('Form submitted:', formData);
-    // Add your login logic here
+    setError('');
+    
+    try {
+      const response = await axios.post('http://localhost:5000/api/auth/login', {
+        email: formData.email,
+        password: formData.password
+      });
+
+      if (response.data.token) {
+        localStorage.setItem('token', response.data.token);
+        navigate('/dashboard'); // Redirect to dashboard after successful login
+      }
+    } catch (err) {
+      setError(err.response?.data?.message || 'Login failed. Please try again.');
+    }
   };
   return (
     <ThemeProvider theme={theme}>
@@ -331,3 +349,10 @@ export default function LoginPage() {
     </ThemeProvider>
   );
 }
+
+// Add this near your TextField components to display errors
+// {error && (
+//   <Typography color="error" variant="body2" sx={{ mt: 2, textAlign: 'center' }}>
+//     {error}
+//   </Typography>
+// )}

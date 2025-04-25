@@ -1,4 +1,4 @@
-package main.java.com.royalfurryhaven.service;
+package com.royalfurryhaven.service;
 
 import com.royalfurryhaven.model.Product;
 import com.royalfurryhaven.repository.ProductRepository;

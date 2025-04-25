@@ -1,18 +1,30 @@
-package main.java.com.royalfurryhaven.model;
+package com.royalfurryhaven.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
+import java.math.BigDecimal;
 
-@Entity
 @Data
+@Entity
+@Table(name = "products")
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
     private String name;
+
     private String description;
-    private Double price;
+
+    @Column(nullable = false)
+    private BigDecimal price;
+
+    private String imageUrl;
+    
+    @Column(nullable = false)
+    private Integer stock;
+
+    @Column(nullable = false)
+    private String category;
 }

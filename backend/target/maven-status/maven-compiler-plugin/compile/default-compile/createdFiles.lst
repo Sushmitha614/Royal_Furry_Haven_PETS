@@ -1,6 +1,9 @@
-main\java\com\royalfurryhaven\controller\ProductController.class
 com\royalfurryhaven\config\WebConfig.class
 com\royalfurryhaven\model\Product.class
 com\royalfurryhaven\repository\ProductRepository.class
 com\royalfurryhaven\service\ProductService.class
+com\royalfurryhaven\controller\ProductController.class
+com\royalfurryhaven\model\User.class
+com\royalfurryhaven\controller\AuthController.class
 com\royalfurryhaven\PetStoreApplication.class
+com\royalfurryhaven\repository\UserRepository.class

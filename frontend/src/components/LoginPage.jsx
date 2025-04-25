@@ -9,7 +9,9 @@ import {
   TextField,
   Typography,
   IconButton,
-  InputAdornment
+  InputAdornment,
+  Snackbar,
+  Alert
 } from '@mui/material';
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import PetsIcon from '@mui/icons-material/Pets';
@@ -49,6 +51,9 @@ export default function LoginPage() {
     remember: false
   });
 
+  const [error, setError] = useState('');
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+
   const handleChange = (event) => {
     const { name, value, checked } = event.target;
     setFormData(prev => ({
@@ -57,26 +62,64 @@ export default function LoginPage() {
     }));
   };
 
-  const [error, setError] = useState('');
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSnackbar(false);
+  };
+
+  const showErrorToast = (message) => {
+    setError(message);
+    setOpenSnackbar(true);
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setError('');
-    
+    setOpenSnackbar(false);
+
+    // Enhanced validation
+    if (!formData.email.trim()) {
+      showErrorToast('Email is required');
+      return;
+    }
+
+    if (!formData.password.trim()) {
+      showErrorToast('Password is required');
+      return;
+    }
+
+    if (!formData.email.includes('@')) {
+      showErrorToast('Please enter a valid email address');
+      return;
+    }
+
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/login', {
-        email: formData.email,
+      console.log('Attempting login...'); // Debug log
+      const response = await axios.post('http://localhost:8080/api/auth/login', {
+        email: formData.email.trim(),
         password: formData.password
       });
 
+      console.log('Login response:', response.data); // Debug log
+
       if (response.data.token) {
         localStorage.setItem('token', response.data.token);
-        navigate('/dashboard'); // Redirect to dashboard after successful login
+        if (formData.remember) {
+          localStorage.setItem('userEmail', formData.email);
+        }
+        console.log('Navigation to dashboard...'); // Debug log
+        navigate('/dashboard');
+      } else {
+        showErrorToast('Invalid response from server');
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'Login failed. Please try again.');
+      console.error('Login error:', err);
+      showErrorToast(err.response?.data?.message || 'Invalid email or password');
     }
   };
+
   return (
     <ThemeProvider theme={theme}>
       <Box
@@ -229,6 +272,7 @@ export default function LoginPage() {
                 Please enter your credentials to continue
               </Typography>
               <Box component="form" noValidate autoComplete="off" onSubmit={handleSubmit}>
+                {/* Removed inline error Typography */}
                 <TextField
                   fullWidth
                   margin="normal"
@@ -333,6 +377,18 @@ export default function LoginPage() {
         </Card>
       </Box>
 
+      {/* Snackbar for toast error messages */}
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert onClose={handleCloseSnackbar} severity="error" sx={{ width: '100%' }}>
+          {error}
+        </Alert>
+      </Snackbar>
+
       {/* Floating Animation Keyframes */}
       <style>{`
         @keyframes rotate {
@@ -349,10 +405,3 @@ export default function LoginPage() {
     </ThemeProvider>
   );
 }
-
-// Add this near your TextField components to display errors
-// {error && (
-//   <Typography color="error" variant="body2" sx={{ mt: 2, textAlign: 'center' }}>
-//     {error}
-//   </Typography>
-// )}

@@ -42,37 +42,17 @@ const theme = createTheme({
   },
 });
 
+
 export default function LoginPage() {
   const navigate = useNavigate();
-  const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
     password: '',
     remember: false
   });
-
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [openSnackbar, setOpenSnackbar] = useState(false);
-
-  const handleChange = (event) => {
-    const { name, value, checked } = event.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: name === 'remember' ? checked : value
-    }));
-  };
-
-  const handleCloseSnackbar = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setOpenSnackbar(false);
-  };
-
-  const showErrorToast = (message) => {
-    setError(message);
-    setOpenSnackbar(true);
-  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -95,31 +75,49 @@ export default function LoginPage() {
       return;
     }
 
-    try {
-      console.log('Attempting login...'); // Debug log
-      const response = await axios.post('http://localhost:8080/api/auth/login', {
-        email: formData.email.trim(),
-        password: formData.password
-      });
+    // Hard-coded credentials for testing
+    const hardCodedEmail = 'test@example.com';
+    const hardCodedPassword = 'password123';
 
-      console.log('Login response:', response.data); // Debug log
+    // Simulate backend response
+    if (formData.email === hardCodedEmail && formData.password === hardCodedPassword) {
+      console.log('Login successful');
+      const mockResponse = { data: { token: 'mock_token_123' } };
 
-      if (response.data.token) {
-        localStorage.setItem('token', response.data.token);
-        if (formData.remember) {
-          localStorage.setItem('userEmail', formData.email);
-        }
-        console.log('Navigation to dashboard...'); // Debug log
-        navigate('/dashboard');
-      } else {
-        showErrorToast('Invalid response from server');
+      // Mimic storing token in localStorage
+      localStorage.setItem('token', mockResponse.data.token);
+
+      if (formData.remember) {
+        localStorage.setItem('userEmail', formData.email);
       }
-    } catch (err) {
-      console.error('Login error:', err);
-      showErrorToast(err.response?.data?.message || 'Invalid email or password');
+
+      // Navigate to dashboard
+      navigate('/dashboard');
+    } else {
+      console.log('Invalid email or password');
+      showErrorToast('Invalid email or password');
     }
   };
 
+  const handleChange = (event) => {
+    const { name, value, checked } = event.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: name === 'remember' ? checked : value
+    }));
+  };
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSnackbar(false);
+  };
+
+  const showErrorToast = (message) => {
+    setError(message);
+    setOpenSnackbar(true);
+  };
   return (
     <ThemeProvider theme={theme}>
       <Box

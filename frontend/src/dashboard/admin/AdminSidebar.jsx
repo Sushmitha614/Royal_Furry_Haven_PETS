@@ -10,7 +10,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import logo from '../../assets/LOGO.png';
 
 const drawerWidthExpanded = 240;
-const drawerWidthCollapsed = 60;
+const drawerWidthCollapsed = 85;
 
 const navItems = [
   { text: 'Dashboard', icon: <DashboardIcon /> },
@@ -52,7 +52,18 @@ export default function AdminSidebar({ open, onToggle, selectedIndex, onSelect }
       })}
       open={open}
     >
-      <Box sx={{ display: 'flex', alignItems: 'center', p: 3, justifyContent: open ? 'flex-start' : 'center' }}>
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          height: 72,
+          px: open ? 1.5 : 6, // Use px for horizontal padding (theme.spacing(3) = 24px, 1.5 = 12px)
+          py: 2,              // Use py for vertical padding (theme.spacing(2) = 16px)
+          justifyContent: open ? 'space-between' : 'center',
+          width: '100%',
+          boxSizing: 'border-box',
+        }}
+      >
         <img
           src={logo}
           alt="Logo"
@@ -60,14 +71,31 @@ export default function AdminSidebar({ open, onToggle, selectedIndex, onSelect }
             width: 48,
             height: 48,
             borderRadius: '50%',
-            marginRight: open ? 12 : 0,
-            transition: 'margin 0.3s',
+            marginRight: open ? 10 : 0,
+            transition: 'margin 0.6s',
+            objectFit: 'cover',
           }}
         />
-        {open && <span style={{ fontWeight: 700, fontSize: 18 }}>Royal Furry Haven</span>}
+        {open && (
+          <span
+            style={{
+              fontWeight: 600,
+              fontSize: 16,
+              whiteSpace: 'nowrap',
+              flex: 1,
+              marginLeft: 1,
+            }}
+          >
+            Royal Furry Haven
+          </span>
+        )}
         <IconButton
           onClick={onToggle}
-          sx={{ marginLeft: 'auto', color: 'white' }}
+          sx={{
+            color: 'white',
+            ml: open ? 1 : 0,
+            alignSelf: 'center',
+          }}
           size="small"
           aria-label={open ? 'Collapse sidebar' : 'Expand sidebar'}
         >
@@ -92,7 +120,12 @@ export default function AdminSidebar({ open, onToggle, selectedIndex, onSelect }
             }}
           >
             <Tooltip title={open ? '' : item.text} placement="right">
-              <ListItemIcon sx={{ color: 'white', minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center' }}>
+              <ListItemIcon sx={{ color: 'white',
+    minWidth: 0,
+    mr: open ? 2 : 0,
+    justifyContent: 'center',
+    display: 'flex',
+    width: open ? 'auto' : '100%',}}>
                 {item.icon}
               </ListItemIcon>
             </Tooltip>

@@ -11,12 +11,12 @@ import { NavLink } from 'react-router-dom';
 const drawerWidth = 240;
 
 const navItems = [
-  { text: 'Dashboard', icon: <DashboardIcon />, path: '/admin/dashboard' },
-  { text: 'Products', icon: <ShoppingCartIcon />, path: '/admin/dashboard/products' },
-  { text: 'Categories', icon: <CategoryIcon />, path: '/admin/dashboard/categories' },
-  { text: 'Orders', icon: <ShoppingCartIcon />, path: '/admin/dashboard/orders' },
-  { text: 'Users', icon: <PeopleIcon />, path: '/admin/dashboard/users' },
-  { text: 'Reports', icon: <AssessmentIcon />, path: '/admin/dashboard/reports' },
+  { text: 'Dashboard', icon: <DashboardIcon />, path: '/admin/products' },
+  { text: 'Products', icon: <ShoppingCartIcon />, path: '/admin/products' },
+  { text: 'Categories', icon: <CategoryIcon />, path: '/admin/categories' },
+  { text: 'Orders', icon: <ShoppingCartIcon />, path: '/admin/orders' },
+  { text: 'Users', icon: <PeopleIcon />, path: '/admin/users' },
+  { text: 'Reports', icon: <AssessmentIcon />, path: '/admin/analytics' },
 ];
 
 export default function AdminSidebar() {

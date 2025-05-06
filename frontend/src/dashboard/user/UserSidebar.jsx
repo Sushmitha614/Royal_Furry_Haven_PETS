@@ -1,19 +1,17 @@
 import React from 'react';
 import { Drawer, List, ListItem, ListItemIcon, ListItemText, Box } from '@mui/material';
-import DashboardIcon from '@mui/icons-material/Dashboard';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import logo from '../../assets/LOGO.png';
 import { NavLink } from 'react-router-dom';
 
 const drawerWidth = 240;
 
 const navItems = [
-  { text: 'Dashboard', icon: <DashboardIcon />, path: '/user/dashboard' },
-  { text: 'My Orders', icon: <ShoppingCartIcon />, path: '/user/dashboard/orders' },
-  { text: 'Wishlist', icon: <FavoriteIcon />, path: '/user/dashboard/wishlist' },
-  { text: 'Profile', icon: <AccountCircleIcon />, path: '/user/dashboard/profile' },
+  { text: 'Profile', icon: <AccountCircleIcon />, path: '/user/profile' },
+  { text: 'My Orders', icon: <ShoppingCartIcon />, path: '/user/orders' },
+  { text: 'Wishlist', icon: <FavoriteIcon />, path: '/user/wishlist' },
 ];
 
 export default function UserSidebar() {

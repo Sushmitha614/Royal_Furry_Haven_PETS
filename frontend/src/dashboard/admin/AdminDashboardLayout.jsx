@@ -1,32 +1,51 @@
 import React, { useState } from 'react';
-import { Box, CssBaseline } from '@mui/material';
+import { Box, CssBaseline, useTheme } from '@mui/material';
 import AdminSidebar from './AdminSidebar';
 
-export default function AdminDashboardLayout({ children }) {
+const contentComponents = [
+  <div>Dashboard Content</div>,
+  <div>Products Content</div>,
+  <div>Categories Content</div>,
+  <div>Orders Content</div>,
+  <div>Users Content</div>,
+  <div>Reports Content</div>,
+];
+
+export default function AdminDashboardLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const theme = useTheme();
 
   const handleToggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
 
+  const handleSidebarSelect = (index) => {
+    setSelectedIndex(index);
+  };
+
   return (
-    <Box sx={{ display: 'flex', minHeight: '100vh' }}>
+    <Box sx={{ display: 'flex', height: '100vh' }}>
       <CssBaseline />
-      <AdminSidebar open={sidebarOpen} onToggle={handleToggleSidebar} />
+      <AdminSidebar
+        open={sidebarOpen}
+        onToggle={handleToggleSidebar}
+        selectedIndex={selectedIndex}
+        onSelect={handleSidebarSelect}
+      />
       <Box
         component="main"
         sx={{
           flexGrow: 1,
-          p: 3,
-          transition: theme =>
-            theme.transitions.create('margin', {
-              easing: theme.transitions.easing.sharp,
-              duration: theme.transitions.duration.leavingScreen,
-            }),
-          marginLeft: sidebarOpen ? '240px' : '60px',
+          flexShrink: 1,
+          p: 0,
+          backgroundColor: '#fff',
+          overflow: 'auto',
         }}
       >
-        {children}
+        <Box sx={{ p: 3, minHeight: '100vh' }}>
+          {contentComponents[selectedIndex]}
+        </Box>
       </Box>
     </Box>
   );

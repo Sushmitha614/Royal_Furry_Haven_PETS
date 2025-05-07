@@ -4,22 +4,28 @@ import {
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
-const products = [
-  {
-    id: 1,
-    image: 'https://placehold.co/60x60',
-    name: 'Royal Cat Food',
-    category: 'Food',
-    price: 1200,
-    stock: 50,
-    status: 'Active',
-  },
-  // ... more products
-];
+// Remove the static products array
+// const products = [ ... ];  // <-- DELETE THIS LINE
 
 export default function AllProducts() {
+  const [products, setProducts] = useState([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    axios.get('http://localhost:8081/api/products') // Change 8081 to your backend port if needed
+      .then(res => setProducts(res.data))
+      .catch(err => console.error(err));
+  }, []);
+
+  // Add delete handler
+  const handleDelete = (id) => {
+    axios.delete(`http://localhost:8081/api/products/${id}`)
+      .then(() => setProducts(products.filter(product => product.id !== id)))
+      .catch(err => console.error(err));
+  };
 
   return (
     <Fade in timeout={600}>
@@ -88,7 +94,7 @@ export default function AllProducts() {
                     <TableCell>
                       <Button size="small" onClick={() => navigate(`edit/${product.id}`)}>Edit</Button>
                       <Button size="small" onClick={() => navigate(`view/${product.id}`)}>View</Button>
-                      <Button size="small" color="error">Delete</Button>
+                      <Button size="small" color="error" onClick={() => handleDelete(product.id)}>Delete</Button>
                     </TableCell>
                   </TableRow>
                 ))}

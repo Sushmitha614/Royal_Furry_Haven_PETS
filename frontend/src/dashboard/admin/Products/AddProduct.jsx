@@ -4,16 +4,50 @@ import {
 } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const categories = ['Food', 'Toys', 'Accessories', 'Grooming'];
 
 export default function AddProduct() {
-  const [status, setStatus] = useState(true);
+  const [name, setName] = useState('');
+  const [category, setCategory] = useState('');
+  const [description, setDescription] = useState('');
+  const [price, setPrice] = useState('');
+  const [stock, setStock] = useState('');
   const [image, setImage] = useState(null);
+  // Remove status if not in backend
+  // const [status, setStatus] = useState(true);
   const navigate = useNavigate();
 
   const handleImageChange = (e) => {
     setImage(e.target.files[0]);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // If your backend expects imageUrl as a string, use a placeholder or upload logic
+    const productData = {
+      name,
+      category,
+      description,
+      price: parseFloat(price),
+      stock: parseInt(stock, 10),
+      imageUrl: image ? image.name : null, // Or handle actual upload
+      // status, // Remove if not in backend
+    };
+
+    try {
+      await axios.post('http://localhost:8081/api/products', productData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      navigate('/admin/products');
+    } catch (error) {
+      console.error('Failed to save product:', error);
+      alert('Failed to save product. Please try again.');
+    }
   };
 
   return (
@@ -24,30 +58,33 @@ export default function AddProduct() {
             <Typography variant="h5" fontWeight={700} mb={2} sx={{ background: 'linear-gradient(90deg,#2196f3,#9c27b0)', WebkitBackgroundClip: 'text', color: 'transparent' }}>
               Add New Product
             </Typography>
-            <Box component="form" display="flex" flexDirection="column" gap={2}>
-              <TextField label="Product Name" required fullWidth />
+            <Box component="form" display="flex" flexDirection="column" gap={2} onSubmit={handleSubmit}>
+              <TextField label="Product Name" required fullWidth value={name} onChange={(e) => setName(e.target.value)} />
               <TextField
                 select
                 label="Category"
                 required
                 fullWidth
-                defaultValue=""
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
               >
                 {categories.map((cat) => (
-                  <MenuItem key={cat} value={cat}>{cat}</MenuItem>
+                  <MenuItem key={cat.id} value={cat.name}>{cat.name}</MenuItem>
                 ))}
               </TextField>
-              <TextField label="Description" multiline rows={3} fullWidth />
+              <TextField label="Description" multiline rows={3} fullWidth value={description} onChange={(e) => setDescription(e.target.value)} />
               <TextField
                 label="Price"
                 type="number"
                 required
                 fullWidth
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
                 InputProps={{
                   startAdornment: <InputAdornment position="start">LKR</InputAdornment>,
                 }}
               />
-              <TextField label="Stock Quantity" type="number" required fullWidth />
+              <TextField label="Stock Quantity" type="number" required fullWidth value={stock} onChange={(e) => setStock(e.target.value)} />
               <Button
                 variant="outlined"
                 component="label"
@@ -63,10 +100,13 @@ export default function AddProduct() {
                 <input type="file" hidden accept="image/*" onChange={handleImageChange} />
               </Button>
               {image && <Typography variant="body2" color="text.secondary">{image.name}</Typography>}
-              <FormControlLabel
-                control={<Switch checked={status} onChange={() => setStatus(!status)} color="primary" />}
-                label={status ? 'Active' : 'Inactive'}
-              />
+              {/* Remove the FormControlLabel below to fix the error */}
+              {/* <FormControlLabel
+                // Remove status switch if not in backend
+                // control={<Switch checked={status} onChange={() => setStatus(!status)} color="primary" />}
+                // label={status ? 'Active' : 'Inactive'}
+                sx={{ display: 'none' }}
+              /> */}
               <Box display="flex" gap={2} mt={2}>
                 <Button
                   variant="contained"

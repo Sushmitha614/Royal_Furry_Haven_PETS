@@ -1,30 +1,26 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  Box, Card, CardContent, Typography, Button, Table, TableHead, TableRow, TableCell, TableBody, Fade, Avatar
+  Box, Card, CardContent, Typography, Button, Table, TableHead, TableRow, TableCell, TableBody, Fade
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { useNavigate } from 'react-router-dom';
-
-const categories = [
-  {
-    id: 1,
-    name: 'Dog Food',
-    description: 'Premium dog food for all breeds.',
-    icon: 'https://placehold.co/40x40',
-    productCount: 12,
-  },
-  {
-    id: 2,
-    name: 'Sri Lankan Handmade Pet Beds',
-    description: 'Locally crafted, comfy beds for pets.',
-    icon: 'https://placehold.co/40x40',
-    productCount: 4,
-  },
-  // ... more categories ...
-];
+import axios from 'axios';
 
 export default function AllCategories() {
+  const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    axios.get('http://localhost:8081/api/categories')
+      .then(res => setCategories(res.data))
+      .catch(err => console.error(err));
+  }, []);
+
+  const handleDelete = (id) => {
+    axios.delete(`http://localhost:8081/api/categories/${id}`)
+      .then(() => setCategories(categories.filter(category => category.id !== id)))
+      .catch(err => console.error(err));
+  };
 
   return (
     <Fade in timeout={600}>
@@ -54,30 +50,19 @@ export default function AllCategories() {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>Icon</TableCell>
                   <TableCell>Name</TableCell>
                   <TableCell>Description</TableCell>
-                  <TableCell>Products</TableCell>
                   <TableCell>Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {categories.map((cat) => (
-                  <TableRow key={cat.id} hover sx={{ transition: 'background 0.2s', '&:hover': { background: '#e3f2fd' } }}>
+                {categories.map((category) => (
+                  <TableRow key={category.id} hover sx={{ transition: 'background 0.2s', '&:hover': { background: '#e0f7fa' } }}>
+                    <TableCell>{category.name}</TableCell>
+                    <TableCell>{category.description}</TableCell>
                     <TableCell>
-                      <Avatar src={cat.icon} variant="rounded" />
-                    </TableCell>
-                    <TableCell>{cat.name}</TableCell>
-                    <TableCell>{cat.description}</TableCell>
-                    <TableCell>
-                      <Button size="small" onClick={() => navigate(`products/${cat.id}`)}>
-                        {cat.productCount}
-                      </Button>
-                    </TableCell>
-                    <TableCell>
-                      <Button size="small" onClick={() => navigate(`edit/${cat.id}`)}>Edit</Button>
-                      <Button size="small" onClick={() => navigate(`products/${cat.id}`)}>View Products</Button>
-                      <Button size="small" color="error">Delete</Button>
+                      <Button size="small" onClick={() => navigate(`edit/${category.id}`)}>Edit</Button>
+                      <Button size="small" color="error" onClick={() => handleDelete(category.id)}>Delete</Button>
                     </TableCell>
                   </TableRow>
                 ))}

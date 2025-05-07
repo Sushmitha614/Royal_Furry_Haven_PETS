@@ -6,14 +6,15 @@ import Products from './Products/Products';
 import Categories from './Categories/Categories';
 import Orders from './Orders/Orders';
 import Users from './Users/Users';
+import Reports from './Reports/Reports';
 
 const contentComponents = [
   <DashboardMain />,
   <Products />,
   <Categories />,
   <Orders />,
-  <Users />, // <-- Replace <div>Users Content</div> with <Users />
-  <div>Reports Content</div>,
+  <Users />,
+  <Reports />, // <-- Replace <div>Reports Content</div> with <Reports />
 ];
 
 export default function AdminDashboardLayout() {

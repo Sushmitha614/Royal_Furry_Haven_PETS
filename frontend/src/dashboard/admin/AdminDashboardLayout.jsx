@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Box, CssBaseline, useTheme } from '@mui/material';
 import AdminSidebar from './AdminSidebar';
+import DashboardMain from './Dashboard/Dashboard';
 
 const contentComponents = [
-  <div>Dashboard Content</div>,
+  <DashboardMain />, // <-- Use your actual dashboard component here
   <div>Products Content</div>,
   <div>Categories Content</div>,
   <div>Orders Content</div>,

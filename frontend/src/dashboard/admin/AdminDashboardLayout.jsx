@@ -3,12 +3,14 @@ import { Box, CssBaseline, useTheme } from '@mui/material';
 import AdminSidebar from './AdminSidebar';
 import DashboardMain from './Dashboard/Dashboard';
 import Products from './Products/Products';
+import Categories from './Categories/Categories';
+import Orders from './Orders/Orders';
 
 const contentComponents = [
   <DashboardMain />,
   <Products />,
-  <div>Categories Content</div>,
-  <div>Orders Content</div>,
+  <Categories />,
+  <Orders />, // <-- Replace <div>Orders Content</div> with <Orders />
   <div>Users Content</div>,
   <div>Reports Content</div>,
 ];

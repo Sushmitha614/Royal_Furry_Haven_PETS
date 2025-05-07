@@ -5,13 +5,14 @@ import DashboardMain from './Dashboard/Dashboard';
 import Products from './Products/Products';
 import Categories from './Categories/Categories';
 import Orders from './Orders/Orders';
+import Users from './Users/Users';
 
 const contentComponents = [
   <DashboardMain />,
   <Products />,
   <Categories />,
-  <Orders />, // <-- Replace <div>Orders Content</div> with <Orders />
-  <div>Users Content</div>,
+  <Orders />,
+  <Users />, // <-- Replace <div>Users Content</div> with <Users />
   <div>Reports Content</div>,
 ];
 

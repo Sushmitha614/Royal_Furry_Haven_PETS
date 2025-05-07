@@ -8,17 +8,18 @@ import AssessmentIcon from '@mui/icons-material/Assessment';
 import MenuOpenIcon from '@mui/icons-material/MenuOpen';
 import MenuIcon from '@mui/icons-material/Menu';
 import logo from '../../assets/LOGO.png';
+import { NavLink } from 'react-router-dom';
 
 const drawerWidthExpanded = 240;
 const drawerWidthCollapsed = 85;
 
 const navItems = [
-  { text: 'Dashboard', icon: <DashboardIcon /> },
-  { text: 'Products', icon: <ShoppingCartIcon /> },
-  { text: 'Categories', icon: <CategoryIcon /> },
-  { text: 'Orders', icon: <ShoppingCartIcon /> },
-  { text: 'Users', icon: <PeopleIcon /> },
-  { text: 'Reports', icon: <AssessmentIcon /> },
+  { text: 'Dashboard', icon: <DashboardIcon />, path: '/admin/dashboard' },
+  { text: 'Products', icon: <ShoppingCartIcon />, path: 'admin/dashboard/products' },
+  { text: 'Categories', icon: <CategoryIcon />, path: 'admin/dashboard/categories' },
+  { text: 'Orders', icon: <ShoppingCartIcon />, path: 'admin/dashboard/orders' },
+  { text: 'Users', icon: <PeopleIcon />, path: 'admin/dashboard/users' },
+  { text: 'Reports', icon: <AssessmentIcon />, path: 'admin/dashboard/reports' },
 ];
 
 export default function AdminSidebar({ open, onToggle, selectedIndex, onSelect }) {
@@ -104,33 +105,45 @@ export default function AdminSidebar({ open, onToggle, selectedIndex, onSelect }
       </Box>
       <List>
         {navItems.map((item, idx) => (
-          <ListItem
-            button
+          <NavLink
+            to={item.path}
             key={item.text}
-            selected={selectedIndex === idx}
-            onClick={() => handleListItemClick(idx)}
-            sx={{
-              '&.active': {
-                background: 'rgba(255,255,255,0.15)',
-                borderRadius: 2,
-              },
-              mb: 1,
-              justifyContent: open ? 'initial' : 'center',
-              px: open ? 2 : 1,
-            }}
+            style={{ textDecoration: 'none', color: 'inherit' }}
+            className={({ isActive }) => (isActive ? 'active' : '')}
           >
-            <Tooltip title={open ? '' : item.text} placement="right">
-              <ListItemIcon sx={{ color: 'white',
-    minWidth: 0,
-    mr: open ? 2 : 0,
-    justifyContent: 'center',
-    display: 'flex',
-    width: open ? 'auto' : '100%',}}>
-                {item.icon}
-              </ListItemIcon>
-            </Tooltip>
-            {open && <ListItemText primary={item.text} />}
-          </ListItem>
+            <ListItem
+              button
+              selected={selectedIndex === idx}
+              onClick={() => handleListItemClick(idx)}
+              sx={{
+                '&.active': {
+                  background: 'rgba(255,255,255,0.15)',
+                  borderRadius: 2,
+                },
+                mb: 1,
+                justifyContent: open ? 'initial' : 'center',
+                px: open ? 2 : 1,
+                transition: 'background 0.3s',
+              }}
+            >
+              <Tooltip title={open ? '' : item.text} placement="right">
+                <ListItemIcon
+                  sx={{
+                    color: 'white',
+                    minWidth: 0,
+                    mr: open ? 2 : 0,
+                    justifyContent: 'center',
+                    display: 'flex',
+                    width: open ? 'auto' : '100%',
+                    transition: 'color 0.3s',
+                  }}
+                >
+                  {item.icon}
+                </ListItemIcon>
+              </Tooltip>
+              {open && <ListItemText primary={item.text} />}
+            </ListItem>
+          </NavLink>
         ))}
       </List>
     </Drawer>

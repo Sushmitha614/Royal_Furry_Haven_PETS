@@ -1,215 +1,94 @@
 import React, { useState } from 'react';
-import {
-  Box,
-  Button,
-  Card,
-  TextField,
-  Typography,
-  IconButton,
-  InputAdornment,
-  Snackbar,
-  Alert,
-  Link
-} from '@mui/material';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import logo from '../assets/LOGO.png';
-import { useNavigate, Link as RouterLink } from 'react-router-dom';
+import { Typography, Box, Snackbar, Alert } from '@mui/material';
 
-const theme = createTheme({
-  palette: {
-    primary: { main: '#2196f3' },
-    secondary: { main: '#9c27b0' },
-    background: { default: '#fff' },
-    text: { primary: '#333', secondary: '#666' },
-  },
-  typography: { fontFamily: 'Roboto, sans-serif' },
-});
+export default function SignUp() {
+  console.log('SignUp component rendered'); // Debug: Check if component is rendered
 
-// Zod schema for validation
-const schema = z.object({
-  email: z.string().email('Invalid email address'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
-  confirmPassword: z.string(),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: 'Passwords do not match',
-  path: ['confirmPassword'],
-});
+  const [form, setForm] = useState({ email: '', password: '' });
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarSeverity, setSnackbarSeverity] = useState('error');
 
-export default function SignUpPage() {
-  const navigate = useNavigate();
-  const [showPassword, setShowPassword] = useState(false);
-  const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'error' });
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+    setError('');
+    setSuccess('');
+  };
 
-  // React Hook Form setup
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    resolver: zodResolver(schema),
-  });
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setError('');
+    setSuccess('');
 
-  // On form submission
-  const onSubmit = async (data) => {
-    try {
-      console.log('Registering:', data);
-      // Simulating email sending
-      setSnackbar({ open: true, message: 'Sign up successful! Please check your email.', severity: 'success' });
-      setTimeout(() => navigate('/login'), 2000); // Redirect after successful signup
-    } catch (err) {
-      setSnackbar({ open: true, message: 'Something went wrong.', severity: 'error' });
+    if (!form.email.trim() || !form.password.trim()) {
+      setError('Email and password are required.');
+      setSnackbarSeverity('error');
+      setOpenSnackbar(true);
+      return;
     }
+    if (!/\S+@\S+\.\S+/.test(form.email)) {
+      setError('Please enter a valid email address.');
+      setSnackbarSeverity('error');
+      setOpenSnackbar(true);
+      return;
+    }
+    setSuccess('Sign up successful! (Connect to backend for real registration)');
+    setSnackbarSeverity('success');
+    setOpenSnackbar(true);
+  };
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSnackbar(false);
   };
 
   return (
-    <ThemeProvider theme={theme}>
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          minHeight: '100vh',
-          backgroundColor: theme.palette.background.default,
-          padding: 2,
-        }}
-      >
-        <Card
-          sx={{
-            width: '100%',
-            maxWidth: 1000,
-            display: 'flex',
-            flexDirection: { xs: 'column', md: 'row' },
-            borderRadius: 4,
-            overflow: 'hidden',
-            boxShadow: 10,
-          }}
-        >
-          {/* Left Panel */}
-          <Box
-            sx={{
-              flex: 1,
-              background: 'linear-gradient(135deg, #2196f3 0%, #9c27b0 100%)',
-              color: 'white',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
-              padding: 4,
-              position: 'relative'
-            }}
-          >
-            <Box sx={{ position: 'absolute', top: 20, left: 20 }}>
-              <img src={logo} alt="Logo" style={{ width: 100, height: 100, borderRadius: '50%' }} />
-            </Box>
-            <Typography variant="h2" fontWeight="bold" gutterBottom sx={{ color: '#fff', textAlign: 'center' }}>
-              Royal Furry Heaven
-            </Typography>
-            <Typography variant="h6" sx={{ textAlign: 'center', maxWidth: '80%', lineHeight: 1.8 }}>
-              Join our furry family today! 💙💜
-            </Typography>
-          </Box>
-
-          {/* Right Panel - Form */}
-          <Box
-            sx={{
-              flex: 1,
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              backgroundColor: '#fff',
-              padding: 4,
-            }}
-          >
-            <Box sx={{ width: '100%', maxWidth: 400 }}>
-              <Typography variant="h5" fontWeight={500} gutterBottom>
-                Sign Up
-              </Typography>
-              <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)}>
-                <TextField
-                  label="Email"
-                  fullWidth
-                  margin="normal"
-                  variant="standard"
-                  {...register('email')}
-                  error={!!errors.email}
-                  helperText={errors.email?.message}
-                />
-                <TextField
-                  label="Password"
-                  fullWidth
-                  margin="normal"
-                  variant="standard"
-                  type={showPassword ? 'text' : 'password'}
-                  {...register('password')}
-                  error={!!errors.password}
-                  helperText={errors.password?.message}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton onClick={() => setShowPassword(!showPassword)}>
-                          {showPassword ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-                <TextField
-                  label="Confirm Password"
-                  fullWidth
-                  margin="normal"
-                  variant="standard"
-                  type="password"
-                  {...register('confirmPassword')}
-                  error={!!errors.confirmPassword}
-                  helperText={errors.confirmPassword?.message}
-                />
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  sx={{
-                    mt: 3,
-                    py: 1.5,
-                    background: 'linear-gradient(to right, #2196f3, #9c27b0)',
-                    fontWeight: 600,
-                    borderRadius: 2,
-                  }}
-                >
-                  Sign Up
-                </Button>
-                <Box mt={3} textAlign="center">
-                  <Typography variant="body2" color="text.secondary">
-                    Already have an account?{' '}
-                    <Link
-                      component={RouterLink}
-                      to="/"
-                      underline="hover"
-                      sx={{ color: theme.palette.primary.main, fontWeight: 500 }}
-                    >
-                      Sign In
-                    </Link>
-                  </Typography>
-                </Box>
-              </Box>
-            </Box>
-          </Box>
-        </Card>
-
-        <Snackbar
-          open={snackbar.open}
-          autoHideDuration={5000}
-          onClose={() => setSnackbar({ ...snackbar, open: false })}
-          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-        >
-          <Alert severity={snackbar.severity} onClose={() => setSnackbar({ ...snackbar, open: false })}>
-            {snackbar.message}
-          </Alert>
-        </Snackbar>
+    <>
+      <Typography variant="h4" component="h1" gutterBottom>
+        Sign Up
+      </Typography>
+      <Box component="form" onSubmit={handleSubmit} noValidate autoComplete="off">
+        <Box sx={{ mb: 3 }}>
+          <label htmlFor="email">Email</label>
+          <input
+            id="email"
+            type="email"
+            name="email"
+            value={form.email}
+            onChange={handleChange}
+            required
+            style={{ width: '100%', padding: 8, marginTop: 4, boxSizing: 'border-box' }}
+          />
+        </Box>
+        <Box sx={{ mb: 3 }}>
+          <label htmlFor="password">Password</label>
+          <input
+            id="password"
+            type="password"
+            name="password"
+            value={form.password}
+            onChange={handleChange}
+            required
+            style={{ width: '100%', padding: 8, marginTop: 4, boxSizing: 'border-box' }}
+          />
+        </Box>
+        <button type="submit" style={{ width: '100%', padding: 10 }}>
+          Sign Up
+        </button>
       </Box>
-    </ThemeProvider>
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert onClose={handleCloseSnackbar} severity={snackbarSeverity} sx={{ width: '100%' }}>
+          {snackbarSeverity === 'error' ? error : success}
+        </Alert>
+      </Snackbar>
+    </>
   );
 }

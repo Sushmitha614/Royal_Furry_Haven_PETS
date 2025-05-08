@@ -19,6 +19,7 @@ import ProfileEdit from './pages/user/profile/ProfileEdit';
 import OrderHistory from './pages/user/orders/OrderHistory';
 import UserOrderDetail from './pages/user/orders/UserOrderDetail';
 import LoginPage from './pages/LoginPage';
+import UserDashboard from './dashboard/user/UserDashboard';
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
           <Route path="profile/edit" element={<ProfileEdit />} />
           <Route path="orders" element={<OrderHistory />} />
           <Route path="orders/:id" element={<UserOrderDetail />} />
+          <Route path="/user/*" element={<UserDashboard />} />
           {/* Add more user pages here */}
         </Route>
       </Routes>

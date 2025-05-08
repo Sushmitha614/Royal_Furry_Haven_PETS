@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import { Box, CssBaseline, useTheme } from '@mui/material';
 import UserSidebar from './UserSidebar';
+import Home from './Home';
+import Orders from './Orders';
+import Profile from './Profile';
+import Wishlist from './Wishlist';
 
 const contentComponents = [
-  <div>Home Content</div>,
-  <div>My Orders Content</div>,
-  <div>Profile Content</div>,
-  <div>Wishlist Content</div>,
+  <Home />,
+  <Orders />,
+  <Profile />,
+  <Wishlist />,
 ];
 
 export default function UserDashboardLayout() {

@@ -19,7 +19,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import logo from '../assets/LOGO.png';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link as RouterLink } from 'react-router-dom';
 
 const theme = createTheme({
   palette: {
@@ -338,7 +338,12 @@ export default function LoginPage() {
                     }
                     label={<Typography variant="body2">Remember me</Typography>}
                   />
-                  <Link href="#" underline="hover" sx={{ color: theme.palette.primary.main, fontWeight: 500 }}>
+                  <Link
+                    component={RouterLink}
+                    to="/forgot-password"
+                    underline="hover"
+                    sx={{ color: theme.palette.primary.main, fontWeight: 500 }}
+                  >
                     Forgot Password?
                   </Link>
                 </Box>
@@ -364,7 +369,12 @@ export default function LoginPage() {
                 <Box mt={3} textAlign="center">
                   <Typography variant="body2" color="text.secondary">
                     Don't have an account?{' '}
-                    <Link href="#" underline="hover" sx={{ color: theme.palette.primary.main, fontWeight: 500 }}>
+                    <Link
+                      component={RouterLink}
+                      to="/signup"
+                      underline="hover"
+                      sx={{ color: theme.palette.primary.main, fontWeight: 500 }}
+                    >
                       Sign Up
                     </Link>
                   </Typography>

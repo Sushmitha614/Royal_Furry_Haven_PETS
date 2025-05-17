@@ -49,29 +49,72 @@ export default function EditCategory() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+
     const formData = new FormData();
     formData.append('name', name);
     formData.append('description', description);
     if (icon) {
       formData.append('icon', icon);
+    } else if (existingIconUrl) {
+      formData.append('iconUrl', existingIconUrl);
     }
 
     try {
       if (isEditMode) {
-        await axios.put(`${API_BASE_URL}/categories/${id}`, formData);
-        toast.success('Category updated!');
-        // Option 1: Refetch updated data and stay on page
-        // setLoading(true);
-        // await fetchCategory(); // You'd need to move fetchCategory outside useEffect
-        // Option 2: Navigate away (current behavior)
-        navigate(-1);
+        const response = await axios.put(`${API_BASE_URL}/categories/${id}`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          }
+        });
+        
+        if (response.status === 200) {
+          toast.success('Category updated successfully!', {
+            style: {
+              background: 'linear-gradient(90deg,#43e97b,#38f9d7)',
+              color: '#fff',
+              padding: '16px',
+              borderRadius: '8px',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+            },
+            duration: 3000,
+            position: 'top-right',
+          });
+          setTimeout(() => {
+            navigate('/admin/dashboard');  // Corrected navigation path
+          }, 1000);
+        }
       } else {
         await axios.post(`${API_BASE_URL}/categories`, formData);
-        toast.success('Category added!');
-        navigate(-1);
+        toast.success('Category added successfully!', {
+          style: {
+            background: 'linear-gradient(90deg,#43e97b,#38f9d7)',
+            color: '#fff',
+            padding: '16px',
+            borderRadius: '8px',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+          },
+          duration: 3000,
+          position: 'top-right',
+        });
+        setTimeout(() => {
+          navigate('/admin/categories');  // Consistent navigation
+        }, 1000);
       }
     } catch (err) {
-      toast.error(isEditMode ? 'Update failed' : 'Add failed');
+      toast.error(err.response?.data?.message || 'Operation failed', {
+        style: {
+          background: '#f44336',
+          color: '#fff',
+          padding: '16px',
+          borderRadius: '8px',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+        },
+        duration: 3000,
+        position: 'top-right',
+      });
+    } finally {
+      setLoading(false);
     }
   };
 

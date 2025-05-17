@@ -53,24 +53,44 @@ export default function EditProduct() {
     e.preventDefault();
     setLoading(true);
 
-    const formData = new FormData();
-    formData.append('name', product.name);
-    formData.append('category', product.category);
-    formData.append('description', product.description);
-    formData.append('price', product.price);
-    formData.append('stock', product.stock);
-    if (image) {
-      formData.append('image', image);
-    }
-
     try {
-      await axios.put(`http://localhost:8081/api/products/${id}`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          'Accept': 'application/json'
-        }
-      });
-      navigate('/admin/products');
+      let requestData;
+      let headers;
+
+      if (image) {
+        const formData = new FormData();
+        formData.append('name', product.name);
+        formData.append('category', product.category);
+        formData.append('description', product.description);
+        formData.append('price', product.price);
+        formData.append('stock', product.stock);
+        formData.append('image', image);
+        
+        requestData = formData;
+        headers = {
+          'Content-Type': 'multipart/form-data'
+        };
+      } else {
+        requestData = {
+          ...product,
+          price: Number(product.price),
+          stock: Number(product.stock)
+        };
+        headers = {
+          'Content-Type': 'application/json'
+        };
+      }
+
+      const response = await axios.put(
+        `http://localhost:8081/api/products/${id}`,
+        requestData,
+        { headers }
+      );
+      
+      if (response.status === 200) {
+        alert('Product updated successfully!');
+        navigate('/admin/products');
+      }
     } catch (error) {
       console.error('Failed to update product:', error);
       alert(error.response?.data?.message || 'Failed to update product. Please try again.');

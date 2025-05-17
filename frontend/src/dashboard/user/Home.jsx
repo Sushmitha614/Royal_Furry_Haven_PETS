@@ -35,26 +35,38 @@ export default function Home() {
   const handleTabChange = async (event, newValue) => {
     setSelectedTab(newValue);
     setLoading(true);
-
+  
     try {
       const productsRes = await axios.get('http://localhost:8081/api/products');
-
+      const allProducts = productsRes.data;
+  
       if (newValue === 0) {
-        setProducts(productsRes.data); // All products
+        setProducts(allProducts); // Show all
       } else {
-        const categoryName = categories[newValue - 1].name.split(' ')[0];
-        const filtered = productsRes.data.filter(
-          product => product.category && product.category.includes(categoryName)
-        );
+        const selectedCategory = categories[newValue - 1];
+        const categoryId = selectedCategory.id;
+  
+        const filtered = allProducts.filter(product => {
+          console.log('🔍 Product:', product);
+          const pid = product.categoryId || product.category?.id || product.category;
+          const cid = categoryId;
+          console.log(`Matching: product category = ${pid}, selected category = ${cid}`);
+          return pid?.toString() === cid?.toString();
+        });
+  
+        console.log('✅ Filtered Products:', filtered);
         setProducts(filtered);
       }
     } catch (err) {
-      console.error('Error:', err);
+      console.error('❌ Error fetching products:', err);
       setProducts([]);
     } finally {
       setLoading(false);
     }
   };
+  
+  
+  
 
   return (
     <Box sx={{ minHeight: '100vh', p: 3, background: 'linear-gradient(145deg, #f6f8ff 0%, #ffffff 100%)' }}>

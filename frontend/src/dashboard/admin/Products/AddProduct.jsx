@@ -23,33 +23,57 @@ export default function AddProduct() {
     setImage(e.target.files[0]);
   };
 
+  // Add loading state
+  const [loading, setLoading] = useState(false);
+  
+  // Update handleSubmit
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // If your backend expects imageUrl as a string, use a placeholder or upload logic
-    const productData = {
-      name,
-      category,
-      description,
-      price: parseFloat(price),
-      stock: parseInt(stock, 10),
-      imageUrl: image ? image.name : null, // Or handle actual upload
-      // status, // Remove if not in backend
-    };
-
+    setLoading(true);
+  
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('category', category);
+    formData.append('description', description);
+    formData.append('price', price);
+    formData.append('stock', stock);
+    if (image) {
+      formData.append('image', image);
+    }
+  
     try {
-      await axios.post('http://localhost:8081/api/products', productData, {
+      const response = await axios.post('http://localhost:8081/api/products', formData, {
         headers: {
-          'Content-Type': 'application/json',
-        },
+          'Content-Type': 'multipart/form-data',
+          'Accept': 'application/json'
+        }
       });
       navigate('/admin/products');
     } catch (error) {
       console.error('Failed to save product:', error);
-      alert('Failed to save product. Please try again.');
+      alert(error.response?.data?.message || 'Failed to save product. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
-
+  
+  // Update Save button
+  <Button
+    variant="contained"
+    sx={{
+      background: 'linear-gradient(90deg,#2196f3,#9c27b0)',
+      borderRadius: 3,
+      fontWeight: 600,
+      flex: 1,
+      boxShadow: 3,
+      transition: 'transform 0.2s',
+      '&:hover': { transform: 'scale(1.05)', background: 'linear-gradient(90deg,#9c27b0,#2196f3)' },
+    }}
+    type="submit"
+    disabled={loading}
+  >
+    {loading ? 'Saving...' : 'Save Product'}
+  </Button>
   return (
     <Fade in timeout={600}>
       <Box maxWidth={600} mx="auto">
@@ -69,7 +93,7 @@ export default function AddProduct() {
                 onChange={(e) => setCategory(e.target.value)}
               >
                 {categories.map((cat) => (
-                  <MenuItem key={cat.id} value={cat.name}>{cat.name}</MenuItem>
+                  <MenuItem key={cat} value={cat}>{cat}</MenuItem>
                 ))}
               </TextField>
               <TextField label="Description" multiline rows={3} fullWidth value={description} onChange={(e) => setDescription(e.target.value)} />

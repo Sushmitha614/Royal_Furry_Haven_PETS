@@ -3,11 +3,22 @@ package com.royalfurryhaven.controller;
 import com.royalfurryhaven.model.Product;
 import com.royalfurryhaven.service.ProductService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import org.springframework.web.multipart.MultipartFile;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.UUID;
 
-@CrossOrigin(origins = "http://localhost:3001") // or your frontend's port
+import java.math.BigDecimal;
+
+@CrossOrigin(origins = { "http://localhost:3000", "http://localhost:3001" })
+
 @RestController
 @RequestMapping("/api/products")
 public class ProductController {
@@ -29,9 +40,38 @@ public class ProductController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping
-    public Product createProduct(@RequestBody Product product) {
-        return productService.saveProduct(product);
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Product> createProduct(
+        @RequestPart("name") String name,
+        @RequestPart("category") String category,
+        @RequestPart("description") String description,
+        @RequestPart("price") String price,
+        @RequestPart("stock") String stock,
+        @RequestPart(value = "image", required = false) MultipartFile image) {
+        try {
+            Product product = new Product();
+            product.setName(name);
+            product.setCategory(category);
+            product.setDescription(description);
+            product.setPrice(new BigDecimal(price));
+            product.setStock(Integer.parseInt(stock));
+            
+            if (image != null && !image.isEmpty()) {
+                String fileName = UUID.randomUUID().toString() + "_" + image.getOriginalFilename();
+                String uploadDir = "d:/PC PROJECT/Royal_Furry_Haven_PETS_NEW/Royal_Furry_Haven_PETS/uploads/products/";
+                Files.createDirectories(Paths.get(uploadDir));
+                Path filePath = Paths.get(uploadDir + fileName);
+                Files.copy(image.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+                product.setImageUrl("/uploads/products/" + fileName);
+            }
+            
+            Product savedProduct = productService.saveProduct(product);
+            return ResponseEntity.ok(savedProduct);
+        } catch (IOException e) {
+            return ResponseEntity.internalServerError().build();
+        } catch (NumberFormatException e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @PutMapping("/{id}")
@@ -40,7 +80,7 @@ public class ProductController {
                 .map(existing -> {
                     existing.setName(product.getName());
                     existing.setDescription(product.getDescription());
-                    existing.setPrice(product.getPrice());
+                    existing.setPrice(product.getPrice()); // This will now work with BigDecimal
                     existing.setImageUrl(product.getImageUrl());
                     existing.setStock(product.getStock());
                     existing.setCategory(product.getCategory());

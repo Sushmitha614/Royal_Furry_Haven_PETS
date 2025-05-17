@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box, Card, CardContent, Typography, TextField, Button, MenuItem, Switch, FormControlLabel, Fade, InputAdornment
 } from '@mui/material';
@@ -6,10 +6,12 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-const categories = ['Food', 'Toys', 'Accessories', 'Grooming'];
+// Remove the static categories array
+// const categories = ['Food', 'Toys', 'Accessories', 'Grooming'];
 
 export default function AddProduct() {
   const [name, setName] = useState('');
+  const [categories, setCategories] = useState([]); // Add categories state
   const [category, setCategory] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
@@ -18,6 +20,17 @@ export default function AddProduct() {
   // Remove status if not in backend
   // const [status, setStatus] = useState(true);
   const navigate = useNavigate();
+
+  // Add useEffect to fetch categories
+  useEffect(() => {
+    axios.get('http://localhost:8081/api/categories')
+      .then(response => {
+        setCategories(response.data);
+      })
+      .catch(error => {
+        console.error('Failed to fetch categories:', error);
+      });
+  }, []);
 
   const handleImageChange = (e) => {
     setImage(e.target.files[0]);
@@ -93,7 +106,7 @@ export default function AddProduct() {
                 onChange={(e) => setCategory(e.target.value)}
               >
                 {categories.map((cat) => (
-                  <MenuItem key={cat} value={cat}>{cat}</MenuItem>
+                  <MenuItem key={cat.id} value={cat.id}>{cat.name}</MenuItem>
                 ))}
               </TextField>
               <TextField label="Description" multiline rows={3} fullWidth value={description} onChange={(e) => setDescription(e.target.value)} />

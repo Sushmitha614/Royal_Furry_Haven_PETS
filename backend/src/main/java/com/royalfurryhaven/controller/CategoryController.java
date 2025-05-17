@@ -32,6 +32,15 @@ public class CategoryController {
         return categoryRepository.findAll();
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getCategoryById(@PathVariable Long id) {
+        Optional<Category> optionalCategory = categoryRepository.findById(id);
+        if (!optionalCategory.isPresent()) {
+            return new ResponseEntity<>("Category not found", HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(optionalCategory.get(), HttpStatus.OK);
+    }
+
     @PostMapping
     public ResponseEntity<?> createCategory(@RequestParam("name") String name,
                                             @RequestParam("description") String description,

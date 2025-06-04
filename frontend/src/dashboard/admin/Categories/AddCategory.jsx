@@ -30,11 +30,15 @@ export default function AddCategory() {
   // Create or Update category
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const categoryData = {
-      name,
-      description
-    };
-
+  
+    if (!name.trim()) {
+      toast.error('Category name is required');
+      return;
+    }
+  
+    const categoryData = { name: name.trim(), description: description.trim() };
+    console.log('Sending to API:', categoryData);
+  
     try {
       if (editingId) {
         await axios.put(`http://localhost:8081/api/categories/${editingId}`, categoryData);
@@ -46,10 +50,11 @@ export default function AddCategory() {
       resetForm();
       fetchCategories();
     } catch (err) {
+      console.error('API Error:', err.response?.data || err.message);
       toast.error('Operation failed');
-      console.error(err);
     }
   };
+  
 
   // Reset form fields
   const resetForm = () => {

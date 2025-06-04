@@ -1,11 +1,7 @@
 package com.royalfurryhaven.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-//import jakarta.persistence.Lob;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "categories")
@@ -15,16 +11,17 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Name is mandatory")
     private String name;
 
     private String description;
+
     public Category() {
     }
 
     public Category(String name, String description) {
         this.name = name;
         this.description = description;
-       
     }
 
     public Long getId() {
@@ -50,5 +47,4 @@ public class Category {
     public void setDescription(String description) {
         this.description = description;
     }
-
 }

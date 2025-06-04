@@ -2,13 +2,11 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 import {
-  Box, Card, CardContent, Typography, TextField, Button, Fade, Avatar
+  Box, Card, CardContent, Typography, TextField, Button, Fade
 } from '@mui/material';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { useNavigate } from 'react-router-dom';
 
 export default function AddCategory() {
-  const [icon, setIcon] = useState(null);
   const [categories, setCategories] = useState([]);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -22,7 +20,7 @@ export default function AddCategory() {
 
   const fetchCategories = async () => {
     try {
-      const res = await axios.get('/api/categories');
+      const res = await axios.get('http://localhost:8081/api/categories');
       setCategories(res.data);
     } catch (err) {
       toast.error('Failed to fetch categories');
@@ -32,27 +30,32 @@ export default function AddCategory() {
   // Create or Update category
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formData = new FormData();
-    formData.append('name', name);
-    formData.append('description', description);
-    if (icon) formData.append('icon', icon);
+    const categoryData = {
+      name,
+      description
+    };
 
     try {
       if (editingId) {
-        await axios.put(`/api/categories/${editingId}`, formData);
+        await axios.put(`http://localhost:8081/api/categories/${editingId}`, categoryData);
         toast.success('Category updated!');
       } else {
-        await axios.post('/api/categories', formData);
+        await axios.post('http://localhost:8081/api/categories', categoryData);
         toast.success('Category added!');
       }
-      setName('');
-      setDescription('');
-      setIcon(null);
-      setEditingId(null);
+      resetForm();
       fetchCategories();
     } catch (err) {
       toast.error('Operation failed');
+      console.error(err);
     }
+  };
+
+  // Reset form fields
+  const resetForm = () => {
+    setName('');
+    setDescription('');
+    setEditingId(null);
   };
 
   // Edit category (populate form)
@@ -60,12 +63,10 @@ export default function AddCategory() {
     setName(cat.name);
     setDescription(cat.description);
     setEditingId(cat._id);
-    setIcon(null);
   };
 
   // Delete category
   const handleDelete = async (id) => {
-    console.log('Deleting category with id:', id); // Add this line
     try {
       await axios.delete(`/api/categories/${id}`);
       toast.success('Category deleted!');
@@ -73,10 +74,6 @@ export default function AddCategory() {
     } catch (err) {
       toast.error('Delete failed');
     }
-  };
-
-  const handleIconChange = (e) => {
-    setIcon(e.target.files[0]);
   };
 
   return (
@@ -92,26 +89,6 @@ export default function AddCategory() {
               <Box component="form" display="flex" flexDirection="column" gap={2} onSubmit={handleSubmit}>
                 <TextField label="Category Name" required fullWidth value={name} onChange={e => setName(e.target.value)} />
                 <TextField label="Description" multiline rows={3} fullWidth value={description} onChange={e => setDescription(e.target.value)} />
-                <Button
-                  variant="outlined"
-                  component="label"
-                  startIcon={<CloudUploadIcon />}
-                  sx={{
-                    borderRadius: 2,
-                    borderColor: '#43e97b',
-                    color: '#43e97b',
-                    '&:hover': { borderColor: '#38f9d7', color: '#38f9d7' },
-                  }}
-                >
-                  Upload Icon/Image
-                  <input type="file" hidden accept="image/*" onChange={handleIconChange} />
-                </Button>
-                {icon && (
-                  <Box display="flex" alignItems="center" gap={2}>
-                    <Avatar src={URL.createObjectURL(icon)} variant="rounded" />
-                    <Typography variant="body2" color="text.secondary">{icon.name}</Typography>
-                  </Box>
-                )}
                 <Box display="flex" gap={2} mt={2}>
                   <Button
                     variant="contained"
@@ -132,10 +109,7 @@ export default function AddCategory() {
                     variant="outlined"
                     sx={{ borderRadius: 3, flex: 1 }}
                     onClick={() => {
-                      setName('');
-                      setDescription('');
-                      setIcon(null);
-                      setEditingId(null);
+                      resetForm();
                       navigate(-1);
                     }}
                   >
@@ -145,15 +119,12 @@ export default function AddCategory() {
               </Box>
               {/* Category List */}
               <Box mt={4}>
-                {/* <Typography variant="h6" mb={2}>Categories</Typography> */}
+                <Typography variant="h6" mb={2}>Categories</Typography>
                 {categories.map(cat => (
                   <Card key={cat._id} sx={{ mb: 2, p: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <Box display="flex" alignItems="center" gap={2}>
-                      <Avatar src={cat.iconUrl} variant="rounded" />
-                      <Box>
-                        <Typography fontWeight={600}>{cat.name}</Typography>
-                        <Typography variant="body2" color="text.secondary">{cat.description}</Typography>
-                      </Box>
+                    <Box>
+                      <Typography fontWeight={600}>{cat.name}</Typography>
+                      <Typography variant="body2" color="text.secondary">{cat.description}</Typography>
                     </Box>
                     <Box>
                       <Button size="small" color="primary" onClick={() => handleEdit(cat)}>Edit</Button>

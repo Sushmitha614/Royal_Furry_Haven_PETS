@@ -4,7 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
+//import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 
 @Entity
@@ -18,16 +18,13 @@ public class Category {
     private String name;
 
     private String description;
-
-    private String iconUrl;
-
     public Category() {
     }
 
-    public Category(String name, String description, String iconUrl) {
+    public Category(String name, String description) {
         this.name = name;
         this.description = description;
-        this.iconUrl = iconUrl;
+       
     }
 
     public Long getId() {
@@ -54,11 +51,4 @@ public class Category {
         this.description = description;
     }
 
-    public String getIconUrl() {
-        return iconUrl;
-    }
-
-    public void setIconUrl(String iconUrl) {
-        this.iconUrl = iconUrl;
-    }
 }

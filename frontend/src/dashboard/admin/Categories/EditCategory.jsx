@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 import {
-  Box, Card, CardContent, Typography, TextField, Button, Fade, Avatar, CircularProgress
+  Box, Card, CardContent, Typography, TextField, Button, Fade, CircularProgress
 } from '@mui/material';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { useNavigate, useParams } from 'react-router-dom';
 
 const API_BASE_URL = 'http://localhost:8081/api';
@@ -14,11 +13,9 @@ export default function EditCategory() {
   console.log('Category ID:', id); // Debug: Check if id is present
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [icon, setIcon] = useState(null);
-  const [existingIconUrl, setExistingIconUrl] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  const isEditMode = Boolean(id); // <-- Add this line
+  const isEditMode = Boolean(id);
 
   useEffect(() => {
     if (!isEditMode) {
@@ -32,7 +29,6 @@ export default function EditCategory() {
         const category = res.data;
         setName(category.name);
         setDescription(category.description);
-        setExistingIconUrl(category.iconUrl);
       } catch (err) {
         console.error('Fetch error:', err); // Debug: Log error details
         toast.error('Failed to fetch category');
@@ -43,10 +39,6 @@ export default function EditCategory() {
     fetchCategory();
   }, [id, isEditMode]);
 
-  const handleIconChange = (e) => {
-    setIcon(e.target.files[0]);
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -54,11 +46,6 @@ export default function EditCategory() {
     const formData = new FormData();
     formData.append('name', name);
     formData.append('description', description);
-    if (icon) {
-      formData.append('icon', icon);
-    } else if (existingIconUrl) {
-      formData.append('iconUrl', existingIconUrl);
-    }
 
     try {
       if (isEditMode) {
@@ -139,31 +126,6 @@ export default function EditCategory() {
               <Box component="form" display="flex" flexDirection="column" gap={2} onSubmit={handleSubmit}>
                 <TextField label="Category Name" required fullWidth value={name} onChange={e => setName(e.target.value)} />
                 <TextField label="Description" multiline rows={3} fullWidth value={description} onChange={e => setDescription(e.target.value)} />
-                <Button
-                  variant="outlined"
-                  component="label"
-                  startIcon={<CloudUploadIcon />}
-                  sx={{
-                    borderRadius: 2,
-                    borderColor: '#43e97b',
-                    color: '#43e97b',
-                    '&:hover': { borderColor: '#38f9d7', color: '#38f9d7' },
-                  }}
-                >
-                  Upload Icon/Image
-                  <input type="file" hidden accept="image/*" onChange={handleIconChange} />
-                </Button>
-                {icon ? (
-                  <Box display="flex" alignItems="center" gap={2}>
-                    <Avatar src={URL.createObjectURL(icon)} variant="rounded" />
-                    <Typography variant="body2" color="text.secondary">{icon.name}</Typography>
-                  </Box>
-                ) : existingIconUrl ? (
-                  <Box display="flex" alignItems="center" gap={2}>
-                    <Avatar src={existingIconUrl} variant="rounded" />
-                    <Typography variant="body2" color="text.secondary">Current Icon</Typography>
-                  </Box>
-                ) : null}
                 <Box display="flex" gap={2} mt={2}>
                   <Button
                     variant="contained"

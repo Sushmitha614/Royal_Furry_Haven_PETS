@@ -92,7 +92,7 @@ export default function LoginPage() {
       }
 
       // Navigate to dashboard
-      navigate('/dashboard');
+      navigate('admin/dashboard');
     } else {
       console.log('Invalid email or password');
       showErrorToast('Invalid email or password');

@@ -55,7 +55,7 @@ export default function AllProducts() {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>Image</TableCell>
+                  {/* <TableCell>Image</TableCell> */}
                   <TableCell>Name</TableCell>
                   <TableCell>Category</TableCell>
                   <TableCell>Price (LKR)</TableCell>
@@ -67,11 +67,11 @@ export default function AllProducts() {
               <TableBody>
                 {products.map((product) => (
                   <TableRow key={product.id} hover sx={{ transition: 'background 0.2s', '&:hover': { background: '#f3e5f5' } }}>
-                    <TableCell>
+                    {/* <TableCell>
                       <Avatar 
                       src={`http://localhost:8081${product.imageUrl}`}
                        variant="rounded" />
-                    </TableCell>
+                    </TableCell> */}
                     <TableCell>{product.name}</TableCell>
                     <TableCell>{product.category}</TableCell>
                     <TableCell>{product.price}</TableCell>

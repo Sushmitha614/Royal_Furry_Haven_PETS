@@ -170,15 +170,26 @@ export default function Home() {
                     <CardMedia
                       component="img"
                       height="200"
-                     image={`http://localhost:8081${product.imageUrl}`}
+                      image={`http://localhost:8081${product.imageUrl}`}
                       alt={product.name}
-                      sx={{ objectFit: 'cover' }}
+                      sx={{
+                        objectFit: 'cover',          // fill the area while keeping aspect ratio
+                        objectPosition: 'center',    // center the image
+                        width: '100%',               // ensure full width of Card
+                        borderTopLeftRadius: '12px',
+                        borderTopRightRadius: '12px'
+                      }}
                     />
 
-                    <CardContent>
+                    <CardContent sx={{
+                      width: '250px',         // Width of the content area (length)
+                      height: '300px',        // Height of the content area
+                      flexDirection: 'column',
+                      padding: 2
+                    }}>
                       <Typography variant="h6" fontWeight={700} gutterBottom>{product.name}</Typography>
                       <Typography variant="body2" color="text.secondary" mb={2}>{product.description}</Typography>
-                      <Typography variant="h6" color="primary" fontWeight={600} mb={2}>{product.price}</Typography>
+                      <Typography variant="h6" color="primary" fontWeight={600} mb={2}>RS.{product.price}</Typography>
                       <Button
                         variant="contained"
                         fullWidth
@@ -187,6 +198,7 @@ export default function Home() {
                           background: 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
                           textTransform: 'none',
                           fontSize: '1.1rem',
+                          mx: 'auto',
                           py: 1
                         }}
                       >

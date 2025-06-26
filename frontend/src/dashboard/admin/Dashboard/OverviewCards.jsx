@@ -7,7 +7,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 const cards = [
   {
     title: 'Total Sales',
-    value: '$12,340',
+    value: '12,340',
     icon: <TrendingUpIcon fontSize="large" />,
     gradient: 'linear-gradient(135deg, #6a11cb 0%, #2575fc 100%)',
   },

@@ -177,7 +177,7 @@ export default function Home() {
                     <CardContent>
                       <Typography variant="h6" fontWeight={700} gutterBottom>{product.name}</Typography>
                       <Typography variant="body2" color="text.secondary" mb={2}>{product.description}</Typography>
-                      <Typography variant="h6" color="primary" fontWeight={600} mb={2}>${product.price}</Typography>
+                      <Typography variant="h6" color="primary" fontWeight={600} mb={2}>{product.price}</Typography>
                       <Button
                         variant="contained"
                         fullWidth

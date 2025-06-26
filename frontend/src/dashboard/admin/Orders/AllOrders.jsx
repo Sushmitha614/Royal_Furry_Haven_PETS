@@ -44,8 +44,8 @@ export default function AllOrders() {
                 {orders.map((order) => (
                   <TableRow key={order.id} hover sx={{ transition: 'background 0.2s', '&:hover': { background: '#fffde7' } }}>
                     <TableCell>{order.id}</TableCell>
-                    <TableCell>{order.customerName}</TableCell>
-                    <TableCell>{order.date}</TableCell>
+                    <TableCell>{order.user.username}</TableCell>
+                    <TableCell>{new Date(order.orderDate).toLocaleDateString()}</TableCell>
                     <TableCell>{order.status}</TableCell>
                     <TableCell>{order.total}</TableCell>
                     <TableCell>

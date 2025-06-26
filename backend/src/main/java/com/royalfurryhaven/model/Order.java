@@ -17,6 +17,8 @@ public class Order {
     @JoinColumn(name = "user_id")
     private User user;
 
+
+
     @Column(name = "order_date", nullable = false)
     private LocalDateTime orderDate;
 
@@ -40,6 +42,8 @@ public class Order {
     public void setUser(User user) {
         this.user = user;
     }
+
+
 
     public LocalDateTime getOrderDate() {
         return orderDate;

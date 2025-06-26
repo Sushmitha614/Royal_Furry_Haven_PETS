@@ -61,7 +61,7 @@ export default function AddProduct() {
           'Accept': 'application/json'
         }
       });
-      navigate('/admin/products');
+      navigate('/admin/dashboard');
     } catch (error) {
       console.error('Failed to save product:', error);
       alert(error.response?.data?.message || 'Failed to save product. Please try again.');

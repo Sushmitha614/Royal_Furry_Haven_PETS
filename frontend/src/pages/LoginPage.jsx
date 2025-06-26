@@ -297,7 +297,7 @@ if (formData.email === adminEmail && formData.password === adminPassword) {
                 color="text.primary" 
                 gutterBottom
               >
-                Sign In
+                Login
               </Typography>
               <Typography 
                 variant="body2" 
@@ -401,7 +401,7 @@ if (formData.email === adminEmail && formData.password === adminPassword) {
                     },
                   }}
                 >
-                  Sign In
+                  Login
                 </Button>
                 <Box mt={3} textAlign="center">
                   <Typography variant="body2" color="text.secondary">

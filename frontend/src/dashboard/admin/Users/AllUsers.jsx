@@ -32,7 +32,7 @@ export default function AllUsers() {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>User ID</TableCell>
+                  {/* <TableCell>User ID</TableCell> */}
                   <TableCell>Name</TableCell>
                   <TableCell>Email</TableCell>
                   <TableCell>Phone</TableCell>
@@ -44,7 +44,7 @@ export default function AllUsers() {
               <TableBody>
                 {users.map((user) => (
                   <TableRow key={user.id} hover sx={{ transition: 'background 0.2s', '&:hover': { background: '#e0f7fa' } }}>
-                    <TableCell>{user.id}</TableCell>
+                    {/* <TableCell>{user.id}</TableCell> */}
                     <TableCell>{user.name}</TableCell>
                     <TableCell>{user.email}</TableCell>
                     <TableCell>{user.phone}</TableCell>

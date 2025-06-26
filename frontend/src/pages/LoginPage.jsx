@@ -131,7 +131,7 @@ if (formData.email === adminEmail && formData.password === adminPassword) {
 
 } else {
   console.error('Invalid email or password');
-  // Optionally show error to the user
+  showErrorToast('Invalid email or password');
 }
 
   };

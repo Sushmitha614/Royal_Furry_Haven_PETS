@@ -38,7 +38,7 @@ export default function Wishlist() {
                 <CardMedia
                   component="img"
                   height="160"
-                  image={item.productImage}
+                  image={`http://localhost:8081${item.productImage}`}
                   alt={item.productName}
                   sx={{ objectFit: 'cover' }}
                 />

@@ -20,8 +20,8 @@ public class WebConfig {
 
             @Override
             public void addResourceHandlers(ResourceHandlerRegistry registry) {
-                registry.addResourceHandler("/uploads/**")
-                        .addResourceLocations("file:uploads/");
+               registry.addResourceHandler("/uploads/products/**")
+       .addResourceLocations("file:///D:/PC%20PROJECT/Royal_Furry_Haven_PETS_NEW/Royal_Furry_Haven_PETS/uploads/products/");
             }
         };
     }

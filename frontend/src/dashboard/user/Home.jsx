@@ -35,17 +35,17 @@ export default function Home() {
   const handleTabChange = async (event, newValue) => {
     setSelectedTab(newValue);
     setLoading(true);
-  
+
     try {
       const productsRes = await axios.get('http://localhost:8081/api/products');
       const allProducts = productsRes.data;
-  
+
       if (newValue === 0) {
         setProducts(allProducts); // Show all
       } else {
         const selectedCategory = categories[newValue - 1];
         const categoryId = selectedCategory.id;
-  
+
         const filtered = allProducts.filter(product => {
           console.log('🔍 Product:', product);
           const pid = product.categoryId || product.category?.id || product.category;
@@ -53,7 +53,7 @@ export default function Home() {
           console.log(`Matching: product category = ${pid}, selected category = ${cid}`);
           return pid?.toString() === cid?.toString();
         });
-  
+
         console.log('✅ Filtered Products:', filtered);
         setProducts(filtered);
       }
@@ -64,9 +64,9 @@ export default function Home() {
       setLoading(false);
     }
   };
-  
-  
-  
+
+
+
 
   return (
     <Box sx={{ minHeight: '100vh', p: 3, background: 'linear-gradient(145deg, #f6f8ff 0%, #ffffff 100%)' }}>
@@ -170,10 +170,11 @@ export default function Home() {
                     <CardMedia
                       component="img"
                       height="200"
-                      image={product.imageUrl}
+                     image={`http://localhost:8081${product.imageUrl}`}
                       alt={product.name}
                       sx={{ objectFit: 'cover' }}
                     />
+
                     <CardContent>
                       <Typography variant="h6" fontWeight={700} gutterBottom>{product.name}</Typography>
                       <Typography variant="body2" color="text.secondary" mb={2}>{product.description}</Typography>

@@ -26,7 +26,7 @@ export default function ProductDetails() {
           <CardContent>
             <Grid container spacing={2} alignItems="center">
               <Grid item>
-                <Avatar src={product.image} sx={{ width: 120, height: 120, boxShadow: 2 }} variant="rounded" />
+                <Avatar src={`http://localhost:8081${product.image}`} sx={{ width: 120, height: 120, boxShadow: 2 }} variant="rounded" />
               </Grid>
               <Grid item xs>
                 <Typography variant="h5" fontWeight={700} sx={{ background: 'linear-gradient(90deg,#2196f3,#9c27b0)', WebkitBackgroundClip: 'text', color: 'transparent' }}>

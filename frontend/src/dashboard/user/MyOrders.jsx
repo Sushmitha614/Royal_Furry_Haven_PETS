@@ -61,7 +61,7 @@ export default function MyOrders() {
                 <TableCell>{order.id}</TableCell>
                 <TableCell>
                   <Box display="flex" alignItems="center">
-                    <img src={order.productImage} alt={order.productName} width={48} height={48} style={{ borderRadius: 8, marginRight: 8 }} />
+                    <img src={`http://localhost:8081${order.productImage}`} alt={order.productName} width={48} height={48} style={{ borderRadius: 8, marginRight: 8 }} />
                     {order.productName}
                   </Box>
                 </TableCell>

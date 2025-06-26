@@ -75,28 +75,65 @@ export default function LoginPage() {
       return;
     }
 
+    // // Hard-coded credentials for testing
+    // const hardCodedEmail = 'test@example.com';
+    // const hardCodedPassword = 'password123';
+
+    // // Simulate backend response
+    // if (formData.email === hardCodedEmail && formData.password === hardCodedPassword) {
+    //   console.log('Login successful');
+    //   const mockResponse = { data: { token: 'mock_token_123' } };
+
+    //   // Mimic storing token in localStorage
+    //   localStorage.setItem('token', mockResponse.data.token);
+
+    //   if (formData.remember) {
+    //     localStorage.setItem('userEmail', formData.email);
+    //   }
+
+    //   // Navigate to dashboard
+    //   navigate('admin/dashboard');
+    // } else {
+    //   console.log('Invalid email or password');
+    //   showErrorToast('Invalid email or password');
+    // }
+
+
     // Hard-coded credentials for testing
-    const hardCodedEmail = 'test@example.com';
-    const hardCodedPassword = 'password123';
+const adminEmail = 'admin@gmail.com';
+const adminPassword = 'password@123';
 
-    // Simulate backend response
-    if (formData.email === hardCodedEmail && formData.password === hardCodedPassword) {
-      console.log('Login successful');
-      const mockResponse = { data: { token: 'mock_token_123' } };
+const userEmail = 'user@gmail.com';
+const userPassword = 'password@123';
 
-      // Mimic storing token in localStorage
-      localStorage.setItem('token', mockResponse.data.token);
+// Simulate backend response
+if (formData.email === adminEmail && formData.password === adminPassword) {
+  console.log('Admin login successful');
+  const mockResponse = { data: { token: 'mock_admin_token' } };
 
-      if (formData.remember) {
-        localStorage.setItem('userEmail', formData.email);
-      }
+  localStorage.setItem('token', mockResponse.data.token);
+  if (formData.remember) {
+    localStorage.setItem('userEmail', formData.email);
+  }
 
-      // Navigate to dashboard
-      navigate('admin/dashboard');
-    } else {
-      console.log('Invalid email or password');
-      showErrorToast('Invalid email or password');
-    }
+  navigate('/admin/dashboard');
+
+} else if (formData.email === userEmail && formData.password === userPassword) {
+  console.log('User login successful');
+  const mockResponse = { data: { token: 'mock_user_token' } };
+
+  localStorage.setItem('token', mockResponse.data.token);
+  if (formData.remember) {
+    localStorage.setItem('userEmail', formData.email);
+  }
+
+  navigate('/user/dashboard');
+
+} else {
+  console.error('Invalid email or password');
+  // Optionally show error to the user
+}
+
   };
 
   const handleChange = (event) => {

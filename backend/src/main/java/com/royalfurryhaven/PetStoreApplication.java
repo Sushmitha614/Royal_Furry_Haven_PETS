@@ -1,4 +1,4 @@
-package main.java.com.royalfurryhaven;
+package com.royalfurryhaven;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
